@@ -15,4 +15,19 @@ server.get('/', async (req, res) => {
   }
 });
 
+server.post('/', async (req, res)=>{
+  try {
+
+const newCar = await req.body;
+const addCar = await Cars.insert(newCar);
+
+res.status(200).json(addCar);
+
+  } catch (err) {
+    console.log(err)
+    res.status(500).json(err)
+  }
+})
+
+
 module.exports = server
