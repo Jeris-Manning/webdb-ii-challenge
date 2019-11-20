@@ -15,19 +15,40 @@ server.get('/', async (req, res) => {
   }
 });
 
-server.post('/', async (req, res)=>{
+server.get('/:id', async (req, res) => {
+  const id = req.params.id;
+
   try {
+    const carId = await Cars.getById(id);
 
-const newCar = await req.body;
-const addCar = await Cars.insert(newCar);
-
-res.status(200).json(addCar);
-
+    res.status(200).json(carId);
   } catch (err) {
-    console.log(err)
-    res.status(500).json(err)
+    res.status(500).json(err);
   }
-})
+});
+
+server.post('/', async (req, res) => {
+  try {
+    const newCar = await req.body;
+    const addCar = await Cars.add(newCar);
+    res.status(200).json(addCar);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+  }
+});
+
+server.delete('/:id', async (req, res) => {
+  const id = req.params.id;
+  console.log(id)
+  try {
+   const carId = await Cars.remove(id);
+    res.status(200).json(`Post ${carId} successfully removed.`);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+module.exports = server;
 
 
-module.exports = server
